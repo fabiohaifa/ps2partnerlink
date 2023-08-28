@@ -1,6 +1,4 @@
-# ps2partnerlink
-
-Script Power-Shell to link tennats with Partner MPN ID
+# Link orfan Tennats with Partner MPN ID
 
 The partner ID is the [Microsoft Cloud Partner Program ID](https://partner.microsoft.com/) for your organization. Be sure to use the Associated Partner ID shown on your partner profile.
 
