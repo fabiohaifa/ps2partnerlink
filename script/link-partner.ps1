@@ -57,23 +57,26 @@ foreach ($tennant in $tennants) {
 
     $myObject.Subscriptions = $subscriptionsList
 
-    # Connecting in the current Tennant
+    # Connecting in the current Tennant for trying change the MPN ID
     Connect-AzAccount -TenantId $($tennant.Id)
 
     # Check if the tennant already has the Partner MPN ID:
-    $existsMPNID = Get-AzManagementPartner
-
-    if ($existsMPNID.Id -eq $null) {
-        #Update-AzManagementPartner -PartnerId $partnerMPN -TenantId $($tennant.Id)    
+    # $existsMPNID = Get-AzManagementPartner
+    try {
+        New-AzManagementPartner -PartnerId $partnerMPN -WhatIf
         $myObject.PAL = "Status: Registered"
-    } elseif (!$existsMPNID.Id -eq $partnerMPN) {
-        $myObject.PAL = "Status: Other MPN ID"
-    } else {
-        $myObject.PAL = "Status: Already registered"
     }
-
+    catch {
+        Update-AzManagementPartner -PartnerId $partnerMPN -WhatIf
+        $myObject.PAL = "Status: Already registered, updated"
+    }
+    
+    Write-Host "Printing object..."
+    Write-Host $myObject
     $result.Add($myObject)
 
 }
 
-Write-Host $result
+Write-Host "Printing results..."
+$resultString = $result -join "`n"
+Write-Host $resultString
