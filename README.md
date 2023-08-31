@@ -8,24 +8,21 @@ The partner ID is the [Microsoft Cloud Partner Program ID](https://partner.micro
 
 ## Input:
 
-MPN ID: [partner MPN ID]
-
+MPN ID: [Partner MPN ID]
+Tenant: [Tenant ID]
  
 ## Output
 
 ```
-{tenants:
-	{tenant 1 name: xxx,
-	PAL: "PAL status" ***(new registration/already registered/other MPN ID)
-	list of subscriptions:	{(subscription 1 name; subscription ID; user permissions),
-			(subscription 2 name; subscription ID; user permissions)....}
-	},
-	{tenant N name: xxx,
-	PAL: "PAL status" ***(new registration/already registered/new review, other MPN ID)
-	list of subscriptions:	{(subscription 1 name; subscription ID; user permissions),
-			(subscription 2 name; subscription ID; user permissions)....}
+	{
+		Tenant: xxxx-xxxx-xxxx-xxxx - xxx,
+		PAL: Registered|Already registered, update,
+		Subscriptions:	{
+			(subscription: yyy, ID: xxxxx-xxxx-xxxx-xxxx, Owner: true|false, Contributor: true|false, Reader: true|false),
+			(subscription: yyy, ID: xxxxx-xxxx-xxxx-xxxx, Owner: true|false, Contributor: true|false, Reader: true|false)
+			...
+			}
 	}
-}
 ```
 
 # Documentation
