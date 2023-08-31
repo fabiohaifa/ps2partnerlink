@@ -56,20 +56,28 @@ $subscriptions = Get-AzSubscription -TenantId $tenantID
 foreach ($subscription in $subscriptions) {
     Write-Host "Get Subscription ID" $($subscription.Id) "-" $($subscription.Name) "permissions..."
     
+    $userPermissions = ""
+
     # Perform operations on the subscription here
     $scope = "/subscriptions/" + $($subscription.Id)
     $roleAssignments = Get-AzRoleAssignment -Scope $scope
 
-    Write-Host "Permissions on Subscription ID" $($subscription.Id) ":" $($roleAssignments -join ",")
-    $subscriptionObject = [PSCustomObject] @{
-        Subscription = ($subscription.Id) + " - " + ($subscription.Name)
-        UserPermissions = $roleAssignments -join ","
+    foreach($ra in $roleAssignments) {
+        $userPermissions += "[Scope: " + $ra.Scope + " Display Name: " + $ra.Display + " , Definition Name: " + $ra.RoleDefinitionName + " ]"
+        Write-Host "Permissions: " $($userPermissions)
     }
 
+    $subscriptionObject = [PSCustomObject] @{
+        Subscription = ($subscription.Id) + " - " + ($subscription.Name)
+        UserPermissions = $userPermissions
+    }
+
+    Write-Host "Subscription Object " $($subscriptionObject)
     $subscriptionsList += $subscriptionObject
 
 }
 
+Write-Host "Subscription List " $($subscriptionsList -join ",")
 $result.Subscriptions = $subscriptionsList -join ","
 
 # Check if the tennant already has the Partner MPN ID:
