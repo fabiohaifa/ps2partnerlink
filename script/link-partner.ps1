@@ -104,11 +104,11 @@ $result.Subscriptions = $subscriptionsList
 # Check if the tennant already has the Partner MPN ID:
 try {
     New-AzManagementPartner -PartnerId $partnerMPN -WhatIf
-    $result.PAL = "Status: Registered"
+    $result.PAL = "Registered"
 }
 catch {
     Update-AzManagementPartner -PartnerId $partnerMPN -WhatIf
-    $result.PAL = "Status: Already registered, updated"
+    $result.PAL = "Already registered, updated"
 }
     
 Write-Host "Printing results..."
