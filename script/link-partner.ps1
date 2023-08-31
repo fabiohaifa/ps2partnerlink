@@ -2,7 +2,7 @@ Write-Host "Installing packages..."
 Install-Module Az.ManagementPartner
 
 Write-Host "Connecting..."
-Connect-AzAccount -UseDeviceAuthentication
+Connect-AzAccount
 
 Write-Host "Connected. Getting User's Tenants..."
 
@@ -15,6 +15,10 @@ foreach ($tenant in $tenants) {
 $partnerMPN = $null
 $tenantID = $null
 $checked = $false
+$haveOwner = $false
+$haveContributor = $false
+$haveReader = $false
+$subscriptionsList = ""
 
 do {
     $partnerMPN = Read-Host "Inform the Partner MPN ID"
@@ -47,38 +51,55 @@ $result = [PSCustomObject] @{
 Write-Host "Connecting on Tenant " $($tenantID) "..."
 Connect-AzAccount -TenantId $($tenantID)
 
-Write-Host "Get Tennat's Subscriptions..."
-
-$subscriptionsList = @()
+Write-Host "Get Tenant's Subscriptions..."
 
 $subscriptions = Get-AzSubscription -TenantId $tenantID
 
 foreach ($subscription in $subscriptions) {
-    Write-Host "Get Subscription ID" $($subscription.Id) "-" $($subscription.Name) "permissions..."
     
-    $userPermissions = ""
-
+    $haveOwner = $false
+    $haveContributor = $false
+    $haveReader = $false
+    
+    Write-Host "Get Subscription ID" $($subscription.Id) "-" $($subscription.Name) "user's permissions..."
+    
     # Perform operations on the subscription here
     $scope = "/subscriptions/" + $($subscription.Id)
-    $roleAssignments = Get-AzRoleAssignment -Scope $scope
+    
+    $context = Get-AzContext
+    $userUpn = $context.Account.Upn
 
-    foreach($ra in $roleAssignments) {
-        $userPermissions += "[Scope: " + $ra.Scope + " Display Name: " + $ra.Display + " , Definition Name: " + $ra.RoleDefinitionName + " ]"
-        Write-Host "Permissions: " $($userPermissions)
+    $roleAssignments = Get-AzRoleAssignment -Scope $scope | Where-Object { $_.PrincipalName -eq $userUpn -and $_.RoleDefinitionName -eq "Owner" }
+
+    if ($roleAssignments) {
+        $haveOwner = $true
+    }
+    
+    $roleAssignments = Get-AzRoleAssignment -Scope $scope | Where-Object { $_.PrincipalName -eq $userUpn -and $_.RoleDefinitionName -eq "Contributor" }
+
+    if ($roleAssignments) {
+        $haveContributor = $true
+    }
+
+    $roleAssignments = Get-AzRoleAssignment -Scope $scope | Where-Object { $_.PrincipalName -eq $userUpn -and $_.RoleDefinitionName -eq "Reader" }
+
+    if ($roleAssignments) {
+        $haveReader = $true
     }
 
     $subscriptionObject = [PSCustomObject] @{
         Subscription = ($subscription.Id) + " - " + ($subscription.Name)
-        UserPermissions = $userPermissions
+        Owner = $haveOwner
+        Contributor = $haveContributor
+        Reader = $haveReader
     }
 
-    Write-Host "Subscription Object " $($subscriptionObject)
-    $subscriptionsList += $subscriptionObject
+    # Write-Host "Subscription Object " $($subscriptionObject)
+    $subscriptionsList += $($subscriptionObject)
 
 }
 
-Write-Host "Subscription List " $($subscriptionsList -join ",")
-$result.Subscriptions = $subscriptionsList -join ","
+$result.Subscriptions = $subscriptionsList
 
 # Check if the tennant already has the Partner MPN ID:
 try {
