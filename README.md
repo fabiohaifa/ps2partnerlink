@@ -1,4 +1,4 @@
-# Link orfan Tennats with Partner MPN ID
+# Linking Tenants without a Partner MPN ID
 
 The partner ID is the [Microsoft Cloud Partner Program ID](https://partner.microsoft.com/) for your organization. Be sure to use the Associated Partner ID shown on your partner profile.
 
