@@ -33,7 +33,7 @@ Copy the content of the file `/script/link-partner.ps1` to a local file inside o
 Run the script by running the following command:
 
 `
-script/link-partner.ps1
+./link-partner.ps1
 `
 
 Note: You may need to authenticate to your Azure account before running the script. You can do this by running the Connect-AzAccount cmdlet and following the prompts.
