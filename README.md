@@ -2,15 +2,17 @@
 
 The partner ID is the [Microsoft Cloud Partner Program ID](https://partner.microsoft.com/) for your organization. Be sure to use the Associated Partner ID shown on your partner profile.
 
-*Challenge accepted in August 25th 2023. #Marcos Paulo Falcirolli
+<i>*Challenge proposed on August 25th 2023. #Marcos Paulo Falcirolli</i>
 
 # Schema:
 
 ## Input:
 
+```
 MPN ID: [Partner MPN ID]
 Tenant: [Tenant ID]
- 
+```
+
 ## Output
 
 ```
@@ -28,3 +30,5 @@ Tenant: [Tenant ID]
 # Documentation
 
 [Microsoft Official Documentation](https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/link-partner-id)
+
+[Management Partner](https://learn.microsoft.com/en-us/powershell/module/az.managementpartner/?view=azps-10.2.0#management-partner)
