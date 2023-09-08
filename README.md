@@ -4,6 +4,18 @@ The partner ID is the [Microsoft Cloud Partner Program ID](https://partner.micro
 
 <i>*Challenge proposed on August 25th 2023. #Marcos Paulo Falcirolli</i>
 
+# Sequence Diagram
+
+```mermaid
+sequenceDiagram 
+	User-->>Shell Prompt: Start Script
+    Shell Prompt-->>User: List all User's associate Tenants 
+	User-->>Shell Prompt: Input MPN ID
+	User-->>Shell Prompt: Input Tenant ID
+	Note left of Final Output: See "Output" session bellow for more detais
+	Shell Prompt-->>Final Output: List PAL Status of the Tenant plus User Subscriptions Scope
+```
+
 # Schema:
 
 ## Input:
